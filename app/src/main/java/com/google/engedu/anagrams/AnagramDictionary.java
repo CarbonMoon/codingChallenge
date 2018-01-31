@@ -18,8 +18,10 @@ package com.google.engedu.anagrams;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -31,20 +33,34 @@ public class AnagramDictionary {
     private static final int MAX_WORD_LENGTH = 7;
     private Random random = new Random();
 
-    private ArrayList<String> wordList;
-    private HashSet<String> anagramList;
-
-
+    private HashSet<String> anagramSet;
+    private HashMap<String, ArrayList<String>> anagramMap;
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
         String line;
-        wordList = new ArrayList<String>(); //initialize wordlist
+
+        //process list of words.
+        ArrayList<String> wordList = new ArrayList<String>(); //initialize wordlist
+        anagramSet = new HashSet<String>();
         while((line = in.readLine()) != null) {
             String word = line.trim();
             wordList.add(word);     //read dictionary, add to wordList
+            anagramSet.add(word);
         }
 
+        while(wordList.size() > 0){
+            String initialString = wordList.get(0);
+            //gets array with list of anagrams
+            ArrayList<String> anagramList = anagramMap.get(sortString(initialString));
+            if(anagramList == null){    //empty list, create new array and add word to it
+                anagramList = new ArrayList<String>();
+                anagramList.add(initialString);
+            }else{  //add word to array
+                anagramList.add(initialString);
+            }
+            anagramMap.put(sortString(initialString), anagramList);    //puts the new arrayList into alphabetSet
+        }
 
     }
 
@@ -57,17 +73,9 @@ public class AnagramDictionary {
         ArrayList<String> result = new ArrayList<String>();
 
         String sortedTargetWord = sortString(targetWord);   //sort target word
-        for(String s : this.wordList) { //compare sorted target word to all words in dictionary...
-            if(sortedTargetWord.equals(sortString(s))){
-                result.add(s);
-            }
+        if(anagramSet.contains(targetWord)){
+            return anagramMap.get(targetWord);
         }
-        //remove target word from anagram list, if its added
-        //more efficient than checking in for loop
-        if(result.contains(targetWord)){
-            result.remove(result.indexOf(targetWord));
-        }
-
         return result;
     }
 
