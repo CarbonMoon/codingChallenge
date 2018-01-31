@@ -43,6 +43,7 @@ public class AnagramDictionary {
         //process list of words.
         ArrayList<String> wordList = new ArrayList<String>(); //initialize wordlist
         anagramSet = new HashSet<String>();
+        anagramMap = new HashMap<String, ArrayList<String>>();
         while((line = in.readLine()) != null) {
             String word = line.trim();
             wordList.add(word);     //read dictionary, add to wordList
@@ -60,11 +61,11 @@ public class AnagramDictionary {
                 anagramList.add(initialString);
             }
             anagramMap.put(sortString(initialString), anagramList);    //puts the new arrayList into alphabetSet
+            wordList.remove(0); //remove the first item
         }
 
     }
 
-    //TODO
     public boolean isGoodWord(String word, String base) {
         return true;
     }
@@ -72,10 +73,11 @@ public class AnagramDictionary {
     public List<String> getAnagrams(String targetWord) {
         ArrayList<String> result = new ArrayList<String>();
 
-        String sortedTargetWord = sortString(targetWord);   //sort target word
+/*        String sortedTargetWord = sortString(targetWord);   //sort target word
         if(anagramSet.contains(targetWord)){
             return anagramMap.get(targetWord);
         }
+*/
         return result;
     }
 
@@ -86,13 +88,11 @@ public class AnagramDictionary {
         return new String(wordCharArray);
     }
 
-    //TODO
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
         return result;
     }
 
-    //TODO
     public String pickGoodStarterWord() {
         return "stop";
     }
