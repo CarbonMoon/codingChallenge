@@ -63,17 +63,18 @@ public class AnagramDictionary {
             anagramMap.put(sortString(initialString), anagramList);    //puts the new arrayList into alphabetSet
         }
         System.out.println("WORD SIZE" + anagramMap.size());
-
-        for(String s : getAnagramsWithOneMoreLetter("pot")){
-            System.out.println(s);
-        }
-//        System.out.println(getAnagrams("stop").size());
-
     }
 
-    //TODO
     public boolean isGoodWord(String word, String base) {
-        return true;
+        String key = sortString(base);
+        ArrayList<String> correctWords = new ArrayList<String>();
+        correctWords = anagramMap.get(key);
+
+        for(int i = 0; i < correctWords.size(); i++){
+            if(correctWords.get(i) == word)
+                return true;
+        }
+        return false;
     }
 
     //doesn't check if targetWord is valid word, just returns anagrams associated with it
