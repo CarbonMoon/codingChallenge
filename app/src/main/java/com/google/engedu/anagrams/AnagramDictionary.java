@@ -51,7 +51,7 @@ public class AnagramDictionary {
         }
 
         for(int i = 0; i < wordList.size(); i++){
-            String initialString = wordList.get(0);
+            String initialString = wordList.get(i);
             //gets array with list of anagrams
             ArrayList<String> anagramList = anagramMap.get(sortString(initialString));
             if(anagramList == null){    //empty list, create new array and add word to it
@@ -61,8 +61,13 @@ public class AnagramDictionary {
                 anagramList.add(initialString);
             }
             anagramMap.put(sortString(initialString), anagramList);    //puts the new arrayList into alphabetSet
-            wordList.remove(0); //remove the first item
         }
+        System.out.println("WORD SIZE" + anagramMap.size());
+
+        for(String s : getAnagramsWithOneMoreLetter("pot")){
+            System.out.println(s);
+        }
+//        System.out.println(getAnagrams("stop").size());
 
     }
 
@@ -101,25 +106,6 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        getAnagramsWithOneMoreLetter("pots");
-        /*System.out.println("HELLO WORLD");
-        System.out.println(wordList.size());
-        System.out.println(anagramSet.size());
-        System.out.println(anagramMap.size());
-        System.out.println("getting pots anagrams");
-        for (String s: getAnagrams("pots")){
-            System.out.println(s);
-        }*/
-
-        int randIndex = (int)(Math.random() * (double)wordList.size()); //gets a random index within wordlist
-        //checks the number of anagrams that the word has, and increments randIndex until a word is found.
-        while(getAnagrams(wordList.get(randIndex)).size() < MIN_NUM_ANAGRAMS){
-            randIndex = (randIndex + 1) % wordList.size();
-            System.out.println("SIZE:" + getAnagrams(wordList.get(randIndex)).size());
-        }
-        System.out.println(getAnagrams(wordList.get(randIndex)).size() + ":SIZE");
-        return wordList.get(randIndex);
-
-//    return "STOP";
+        return "STOP";
     }
 }
