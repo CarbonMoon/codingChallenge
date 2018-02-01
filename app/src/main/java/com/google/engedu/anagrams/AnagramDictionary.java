@@ -18,7 +18,6 @@ package com.google.engedu.anagrams;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -62,19 +61,38 @@ public class AnagramDictionary {
             }
             anagramMap.put(sortString(initialString), anagramList);    //puts the new arrayList into alphabetSet
         }
-        System.out.println("WORD SIZE" + anagramMap.size());
+        //System.out.println("WORD SIZE" + anagramMap.size());
     }
 
     public boolean isGoodWord(String word, String base) {
         String key = sortString(base);
-        ArrayList<String> correctWords = new ArrayList<String>();
-        correctWords = anagramMap.get(key);
 
+        //check if valid dictionary word
+        if(anagramSet.contains(word)){
+            //check if word doesn't contain base word
+            if(word.contains(base)){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            return false;
+        }
+/*
+        //gets list of words
+        ArrayList<String> correctWords = new ArrayList<String>(getAnagramsWithOneMoreLetter(key));
+        System.out.println("Correct Words");
+        for(String s : correctWords){
+            System.out.println(s);
+        }
+        if(correctWords == null)    //null checking
+            return false;
         for(int i = 0; i < correctWords.size(); i++){
-            if(correctWords.get(i) == word)
+            if(correctWords.get(i).equalsIgnoreCase(word))  //checks if word is in set
                 return true;
         }
         return false;
+        */
     }
 
     //doesn't check if targetWord is valid word, just returns anagrams associated with it
@@ -107,6 +125,18 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        return "STOP";
+        Random rand = new Random();
+        int n = rand.nextInt(wordList.size()) + 0;
+
+        while (n<wordList.size())
+        {
+            if (getAnagramsWithOneMoreLetter(wordList.get(n)).size() >= 5)
+                return wordList.get(n);
+            n++;
+
+            if (n >= wordList.size())
+                n = 0;
+        }
+        return "post";
     }
 }
