@@ -35,13 +35,13 @@ public class AnagramDictionary {
 
     private HashSet<String> anagramSet;
     private HashMap<String, ArrayList<String>> anagramMap;
+    private ArrayList<String> wordList;
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
         String line;
-
         //process list of words.
-        ArrayList<String> wordList = new ArrayList<String>(); //initialize wordlist
+        wordList = new ArrayList<String>(); //initialize wordlist
         anagramSet = new HashSet<String>();
         anagramMap = new HashMap<String, ArrayList<String>>();
         while((line = in.readLine()) != null) {
@@ -50,7 +50,7 @@ public class AnagramDictionary {
             anagramSet.add(word);
         }
 
-        while(wordList.size() > 0){
+        for(int i = 0; i < wordList.size(); i++){
             String initialString = wordList.get(0);
             //gets array with list of anagrams
             ArrayList<String> anagramList = anagramMap.get(sortString(initialString));
@@ -66,34 +66,60 @@ public class AnagramDictionary {
 
     }
 
+    //TODO
     public boolean isGoodWord(String word, String base) {
         return true;
     }
 
+    //doesn't check if targetWord is valid word, just returns anagrams associated with it
     public List<String> getAnagrams(String targetWord) {
         ArrayList<String> result = new ArrayList<String>();
 
-/*        String sortedTargetWord = sortString(targetWord);   //sort target word
-        if(anagramSet.contains(targetWord)){
-            return anagramMap.get(targetWord);
+        String sortedTargetWord = sortString(targetWord).toLowerCase();   //sort target word
+        if(anagramMap.containsKey(sortedTargetWord)){
+            result = anagramMap.get(sortedTargetWord);  //get anagrams
         }
-*/
+
         return result;
     }
 
     //takes string, sorts char by alphabetical order
     private String sortString(String word){
-        char wordCharArray[] = word.toCharArray();  //turn to char array, sort using util.sort
+        char wordCharArray[] = word.toLowerCase().toCharArray();  //turn to char array, sort using util.sort
         Arrays.sort(wordCharArray);
         return new String(wordCharArray);
     }
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        String biggerWord = word;
+        for(int i = 0; i < 26; i++){
+            biggerWord = word + Character.toString((char)('a'+i));    //add letters from alphabet to
+            result.addAll(getAnagrams(biggerWord));
+        }
         return result;
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
+        getAnagramsWithOneMoreLetter("pots");
+        /*System.out.println("HELLO WORLD");
+        System.out.println(wordList.size());
+        System.out.println(anagramSet.size());
+        System.out.println(anagramMap.size());
+        System.out.println("getting pots anagrams");
+        for (String s: getAnagrams("pots")){
+            System.out.println(s);
+        }*/
+
+        int randIndex = (int)(Math.random() * (double)wordList.size()); //gets a random index within wordlist
+        //checks the number of anagrams that the word has, and increments randIndex until a word is found.
+        while(getAnagrams(wordList.get(randIndex)).size() < MIN_NUM_ANAGRAMS){
+            randIndex = (randIndex + 1) % wordList.size();
+            System.out.println("SIZE:" + getAnagrams(wordList.get(randIndex)).size());
+        }
+        System.out.println(getAnagrams(wordList.get(randIndex)).size() + ":SIZE");
+        return wordList.get(randIndex);
+
+//    return "STOP";
     }
 }
